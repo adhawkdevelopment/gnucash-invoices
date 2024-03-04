@@ -1,0 +1,188 @@
+<html>
+    <!-- can have approx 16 total rows of entries at max within a single page -->
+<body>
+    <!-- company info -->
+    <table id="invoice_header">
+        <tr>
+            <td id="company_info" class="left">
+                <h1 id="company_name">{{ COMPANY_INFO['NAME'] }}</h1>
+                <img src="file://{{ image }}">
+                <table id="company_address">
+                    {% for line in COMPANY_INFO['ADDRESS'] %}
+                        <tr><td>{{ line.strip() }}</td></tr>
+                    {% endfor %}
+                </table>
+                <table id="company_contact">
+                    <tr><td>{{ COMPANY_INFO['PHONE'] }}</td></tr>
+                    <tr><td>{{ COMPANY_INFO['EMAIL'] }}</td></tr>
+                    <tr><td>{{ COMPANY_INFO['WEBSITE'] }}</td></tr>
+                </table>
+            </td>
+            <td id="invoice_type" class="center">
+                <table>
+                    <tr><p>PROMISSORY NOTE</p></tr>
+                    <tr><p>AND</p></tr>
+                    <tr><h2>{{ DOCUMENT_TYPE.upper() }}</h2></tr>
+                    <tr class="right"><p>
+                        <th>Invoice #:&nbsp;&nbsp;</th>
+                        <th>{{ invoice['id']|upper }}</th>
+                    </p></tr>
+                    {% set date_posted = invoice['date_posted'].split(' ')[0] %}
+                    <tr class="right">
+                        <th>Invoice Date:&nbsp;&nbsp;</th>
+                        <td>{{ date_posted }}</td>
+                    </tr>
+                    <tr class="right">
+                        <th>Locksmith:&nbsp;&nbsp;</th>
+                        {% set locksmith = invoice['id'].split('0')[0].split('1')[0].split('2')[0].split('3')[0].split('4')[0].split('5')[0].split('6')[0].split('7')[0].split('8')[0].split('9')[0] %}
+                        <td>{{ locksmith }}</td>
+                    </tr>
+                    <tr class="right">
+                        <th>Billing Terms:&nbsp;&nbsp;</th>
+                        <td>
+                            {% if billterms != None %}
+                                {{ billterms['name']}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="right">
+                        <th>Billing ID:&nbsp;&nbsp;</th>
+                        <td>{{ invoice['billing_id']}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table id="customer_invoice">
+        <tr>
+            <td id="customer_details">
+                <table>
+                    <tr>
+                        <th>Bill To</th>
+                        <th>Job Site</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <!-- customer info -->
+                                {% if customer['addr_name'] != "" %}
+                                    <tr><td>{{ customer['addr_name'] }}</td></tr>
+                                {% endif %}
+                                <tr><td>{{ customer['addr_addr1'] }}</td></tr>
+                                <tr><td>{{ customer['addr_addr2'] }}</td></tr>
+                                {% if customer['addr_addr3'] != "" %}
+                                    <tr><td>{{ customer['addr_addr3'] }}</td></tr>
+                                {% endif %}
+                                {% if customer['addr_addr4'] != "" %}
+                                    <tr><td>{{ customer['addr_addr4'] }}</td></tr>
+                                {% endif %}
+                                {% if customer['addr_addr5'] != "" %}
+                                    <tr><td>{{ customer['addr_addr5'] }}</td></tr>
+                                {% endif %}
+                            </table>
+                        </td>
+                        {% if job[name] != '' %}
+                            <td>{{ job[name] }}</td>
+                        {% endif %}
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <!-- entry table -->
+    {% set entry_table_width = 4 %}
+
+    <table id="entry_table">
+        <thead>
+            <tr id="entry_header">
+                <th id="quantity_cell">Qty</th>
+                <th id="decription_cell">Description</th>
+                <th id="unit_price_cell">Unit Price</th>
+                <th id="total_price_cell">Total Price</th>
+            </tr>
+        </thead>
+        <tbody> <!-- display invoice entry lines, keeping running totals -->
+            {% if materials_entries|length > 0 %}
+                <tr class="entry_category">
+                    <td></td>
+                    <td>MATERIALS</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+            {% for entry in materials_entries %}
+                <tr>
+                    {% set quantity = entry['quantity_num']/entry['quantity_denom'] %}
+                    <td class="center wrap">{{ quantity }}</td>
+                    <td class="left wrap">{{ entry['description'] }}</td>
+                    {% set unit_price = entry['i_price_num']/entry['i_price_denom'] %}
+                    <td class="right wrap">${{ '%0.2f' % unit_price }}</td>     
+                    {% set total_price = quantity*unit_price %}
+                    <td class="right wrap">${{ '%0.2f' % total_price }}</td>
+                </tr>
+            {% endfor %}
+            {% if DOCUMENT_TYPE.upper() == 'SPECIAL ORDER' %}
+                {% if labor_entries|length > 0 %}
+                    <tr class="entry_category">
+                        <td></td>
+                        <td>LABOR</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endif %}
+                {% for entry in labor_entries %}
+                    <tr>
+                        {% set quantity = entry['quantity_num']/entry['quantity_denom'] %}
+                        <td class="center wrap">{{ quantity }}</td>
+                        <td class="left wrap">{{ entry['description'] }}</td>
+                        {% set unit_price = entry['i_price_num']/entry['i_price_denom'] %}
+                        <td class="right wrap">${{ '%0.2f' % unit_price }}</td>     
+                        {% set total_price = quantity*unit_price %}
+                        <td class="right wrap">${{ '%0.2f' % total_price }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+
+
+            <!-- subtotals row -->
+            <tr>
+                <td class="right" colspan={{ entry_table_width-2 }}>Subtotal</td>
+                {% if DOCUMENT_TYPE.upper() == 'SPECIAL ORDER' %}
+                {% set invoice_subtotal = totals['materials_total'] %}
+                {% else %}
+                    {% set invoice_subtotal = totals['materials_total']+totals['labor_total'] %}
+                {% endif %}
+                <td class="right wrap" colspan="2">${{ '%0.2f' % invoice_subtotal }}</td>
+            </tr>
+            
+            <!-- tax row -->
+            <tr>
+                <td class="right" colspan={{ entry_table_width-2 }}>Tax&nbsp;&nbsp;({{ totals['tax_percent'] }}%)</td>
+                {% set invoice_tax = (totals['materials_total']*(totals['tax_percent']/100))|round(2, 'ceil') %}
+                <td class="right wrap" colspan="2">{{ '%0.2f' % invoice_tax }}</td>
+            </tr>
+
+            <!-- total row -->
+            <tr>
+                <th class="right" colspan={{ entry_table_width-2 }}>Amount Due</th>
+                {% set invoice_total = invoice_subtotal+invoice_tax %}
+                <th class="right wrap" colspan="2">${{ '%0.2f' % invoice_total }}</th>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <footer>
+        <p id="terms" class="center">{{ TERMS }}</p>
+        <br>
+        <br>
+        <div class="left">
+            <h3>Signature:&nbsp;______________________________________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:&nbsp;________________</h3>
+            <h3>Print:&nbsp;____________________________________________</h3>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{
+    "INVOICE": "Invoice",
+    "WORKORDER": "Work Order",
+    "SPECIALORDER": "Special Order Invoice" 
+}

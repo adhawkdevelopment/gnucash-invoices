@@ -1,0 +1,143 @@
+@page {
+    margin-left: 1cm;
+    margin-right: 1cm;
+    margin-top: 0;
+    margin-bottom: 0;
+
+}
+
+html {
+    line-height: 1.6;
+}
+body {
+    font: normal normal 10pt "Sans";
+    margin: 0;
+    padding: 0;
+}
+
+table { /* table does not inherit font */
+    font: normal normal 10pt "Sans";
+}
+
+
+#invoice_header {
+    width: 100%;
+}
+
+#company_info {
+    text-align: left;  
+}
+
+#company_info img {
+    float:left;
+}
+
+#company_name {
+    font: bold normal 18pt "Sans";
+    text-align: left;
+}
+
+#company_address {
+    margin-left:6em;
+    text-align: left;
+}
+
+#company_contact {
+    text-align: left;
+    margin-top: 1em;
+}
+
+#invoice_type {
+    position: fixed;
+    right: 0;
+    vertical-align: top;
+}
+
+
+
+#customer_invoice {
+    text-align: center;
+    width: 100%;
+}
+
+#customer_details {
+    width: 60%;
+    text-align: left;
+}
+
+
+#customer_details table tr td, #customer_details table tr th {
+    width: 50%;
+}
+
+
+#invoice_details {
+    width: 40%;
+    text-align: right;
+}
+
+#entry_table {
+    text-align: center;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.entry_category td,.entry_category th {
+    border-style: none;
+}
+
+#entry_table td, #entry_table th {
+    border: solid;
+    border-width: 1px;
+}
+
+#entry_header {
+    background-color: grey;
+}
+
+#quantity_cell {
+    width: 6%;
+}
+
+#description_cell {
+    width: 60%;
+}
+
+#unit_price_cell {
+    width: 12%;
+}
+
+#total_price_cell {
+    width: 12%;
+}
+
+.entry_category {
+    background-color: lightgrey;
+}
+
+#footer {
+    width: 100%;
+    
+}
+
+#terms {
+    font: normal normal 8pt "Sans";
+}
+
+.left {
+    text-align: left;
+    padding-left: 1%;
+}
+
+.right {
+    text-align: right;
+    padding-right: 1%;
+}
+
+.center {
+    text-align: center;
+}
+
+.wrap {
+    text-wrap: wrap;
+}
