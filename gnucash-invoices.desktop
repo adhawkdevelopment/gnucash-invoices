@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=GNUCash Invoices Tool
+Comment=Adds functionality to gnucash
+Keywords=GNUCash;Accounting;Invoices;Tool;
+Exec=/opt/gnucash-invoices/.venv/bin/python3 /opt/gnucash-invoices/app.py
+Icon=/opt/gnucash-invoices/app_logo.png
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=GNUCash;Accounting;Invoices;Tool;
+StartupWMClass=app.py
