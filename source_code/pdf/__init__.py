@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 
+APP_FOLDER_PATH = '/opt/gnucash-invoices/'
 
 
 
@@ -79,7 +80,7 @@ def create_invoice(invoice_guid, type):
         image = __path__[0] + '/company_logo.png'
         html_invoice = template.render(invoice=invoice, billterms=billterms, materials_entries=materials_entries, labor_entries=labor_entries, totals=totals, job=job, customer=customer, COMPANY_INFO=COMPANY_INFO, DOCUMENT_TYPE=DOCUMENT_TYPE, TERMS=TERMS, image=image)
         with open(__path__[0] + '/invoice_template.css', 'r') as f:
-            weasyprint.HTML(string=html_invoice).write_pdf('temp/' + invoice['id'] + ' ' + DOCUMENT_TYPE + '.pdf', stylesheets=[weasyprint.CSS(string=f.read())])
+            weasyprint.HTML(string=html_invoice).write_pdf(APP_FOLDER_PATH + 'temp/' + invoice['id'] + ' ' + DOCUMENT_TYPE + '.pdf', stylesheets=[weasyprint.CSS(string=f.read())])
             return True
     
 
