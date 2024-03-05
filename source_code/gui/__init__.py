@@ -120,6 +120,8 @@ class Window(QMainWindow):
                                             return None
                                     else:
                                         return None
+                        else:
+                            return None
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle('Alert')
@@ -158,15 +160,15 @@ class Window(QMainWindow):
                             if invoice_guid:
                                 dialog = Layout.InvoiceTypeSelectionDialog()
                                 dialog.exec_()
-                                filename = invoice_id + ' ' + pdf.DOCUMENT_TYPES[dialog.selected_value] + '.pdf'
                                 if dialog.selected_value != None:
+                                    filename = invoice_id + ' ' + pdf.DOCUMENT_TYPES[dialog.selected_value] + '.pdf'
                                     pdf.create_invoice(invoice_guid, dialog.selected_value)
                                     os.system('evince ' + '"' + APP_FOLDER_PATH + 'temp/' + filename + '"')
                                     os.remove('"' + APP_FOLDER_PATH + 'temp/' + filename + '"')
                                     return True
                                 else:
                                     return None
-
+                    
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle('Alert')
