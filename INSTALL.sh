@@ -31,7 +31,6 @@ sudo chown -R $USER:$USER /opt/gnucash-invoices/
 
 python3 -m venv /opt/gnucash-invoices/.venv
 source /opt/gnucash-invoices/.venv/bin/activate
-pip3 install --upgrade pip
 pip3 install jinja2==3.1.3
 pip3 install weasyprint==52.5
 pip3 install google-api-python-client==2.120.0
