@@ -30,7 +30,12 @@
                     {% set date_posted = invoice['date_posted'].split(' ')[0] %}
                     <tr class="right">
                         <th>Invoice Date:&nbsp;&nbsp;</th>
-                        <td>{{ date_posted }}</td>
+                        <td>
+                            {% if invoice['date_posted'] != None %}
+                                {% set date_posted = invoice['date_posted'].split(' ')[0] %}
+                                {{ date_posted }}
+                            {% endif%}
+                        </td>
                     </tr>
                     <tr class="right">
                         <th>Locksmith:&nbsp;&nbsp;</th>
