@@ -158,10 +158,11 @@ class Window(QMainWindow):
                             if invoice_guid:
                                 dialog = Layout.InvoiceTypeSelectionDialog()
                                 dialog.exec_()
+                                filename = invoice_id + ' ' + pdf.DOCUMENT_TYPES[dialog.selected_value] + '.pdf'
                                 if dialog.selected_value != None:
                                     pdf.create_invoice(invoice_guid, dialog.selected_value)
-                                    os.system('evince ' + 'temp/' + invoice_id + '.pdf')
-                                    os.remove('temp/' + invoice_id + '.pdf')
+                                    os.system('evince ' + 'temp/' + filename)
+                                    os.remove('temp/' + filename)
                                     return True
                                 else:
                                     return None
