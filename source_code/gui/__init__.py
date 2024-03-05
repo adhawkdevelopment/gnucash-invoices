@@ -88,7 +88,7 @@ class Window(QMainWindow):
                                     customer = db.get_customer_from_invoice(invoice)
                                     document_type = pdf.get_document_types()[dialog.selected_value]
                                     email_subject = invoice['id'] + ' ' + document_type
-                                    filename = invoice['id'] + '.pdf'
+                                    filename = invoice['id'] + ' ' + document_type + '.pdf'
                                     filename_path = './temp/'
                                     if document_type != None:
                                         if customer['addr_email'] != '':
