@@ -14,11 +14,9 @@ unset pass
 
 echo "What is the name of the database you will be using? NOTE: DO NOT INCLUDE '.gnucash' at the end"
 read dbName
-sudo mkdir /var/gnucash
-sudo mkdir /var/gnucash-invoices/archive
-sudo mv ./local_archive.py /var/gnucash/archive/
-sudo mv local_gnucash_archive /etc/cron.d/
-
+sudo mkdir -p /var/gnucash/archive/log
+sudo mv ./local_archive.py /var/gnucash/
+crontab crontab_entry
 
 sudo chown -R $USER:$USER /var/gnucash
 
