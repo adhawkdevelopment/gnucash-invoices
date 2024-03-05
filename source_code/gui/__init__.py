@@ -77,47 +77,49 @@ class Window(QMainWindow):
             for i in range(parentLayout.count()):
                 if parentLayout.itemAt(i).layout() != None and parentLayout.itemAt(i).itemAt(0) != None:
                     if parentLayout.itemAt(i).itemAt(0).widget() == button:
-                        row = parentLayout.itemAt(i)
-                        if row:
-                            invoice_guid = row.itemAt(6).widget().text()
-                            if invoice_guid:
-                                dialog = Layout.InvoiceTypeSelectionDialog()
-                                dialog.exec_()
-                                if dialog.selected_value != None:
-                                    invoice = db.get_invoice_by_guid(invoice_guid)
-                                    customer = db.get_customer_from_invoice(invoice)
-                                    document_type = pdf.get_document_types()[dialog.selected_value]
-                                    email_subject = invoice['id'] + ' ' + document_type
-                                    filename = email_subject + '.pdf'
-                                    filename_path = './temp/'
-                                    if document_type != None:
-                                        if customer['addr_email'] != '':
-                                            created = pdf.create_invoice(invoice_guid, dialog.selected_value)
-                                            if created == True:
-                                                gmail.sendMail(customer['addr_email'], email_subject, filename_path + filename)
-                                                os.remove(filename_path + filename)
+                        reply = QMessageBox.question(self, 'Confirmation', 'Do you want to send email?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                        if reply == QMessageBox.Yes:                        
+                            row = parentLayout.itemAt(i)
+                            if row:
+                                invoice_guid = row.itemAt(6).widget().text()
+                                if invoice_guid:
+                                    dialog = Layout.InvoiceTypeSelectionDialog()
+                                    dialog.exec_()
+                                    if dialog.selected_value != None:
+                                        invoice = db.get_invoice_by_guid(invoice_guid)
+                                        customer = db.get_customer_from_invoice(invoice)
+                                        document_type = pdf.get_document_types()[dialog.selected_value]
+                                        email_subject = invoice['id'] + ' ' + document_type
+                                        filename = email_subject + '.pdf'
+                                        filename_path = './temp/'
+                                        if document_type != None:
+                                            if customer['addr_email'] != '':
+                                                created = pdf.create_invoice(invoice_guid, dialog.selected_value)
+                                                if created == True:
+                                                    gmail.sendMail(customer['addr_email'], email_subject, filename_path + filename)
+                                                    os.remove(filename_path + filename)
+                                                    msg = QMessageBox()
+                                                    msg.setIcon(QMessageBox.Information)
+                                                    msg.setWindowTitle('Success')
+                                                    msg.setText("Email has been sent!")
+                                                    msg.setStandardButtons(QMessageBox.Ok)
+                                                    msg.exec()
+                                                    return True
+                                                else:
+                                                    return None
+                                            else:
                                                 msg = QMessageBox()
                                                 msg.setIcon(QMessageBox.Information)
-                                                msg.setWindowTitle('Success')
-                                                msg.setText("Email has been sent!")
+                                                msg.setWindowTitle('Alert')
+                                                msg.setText("This customer does not have an email associated with their account!")
+                                                msg.setInformativeText("Please add an email in the Billing Address section of their profile in GNUCash")
                                                 msg.setStandardButtons(QMessageBox.Ok)
                                                 msg.exec()
-                                                return True
-                                            else:
                                                 return None
                                         else:
-                                            msg = QMessageBox()
-                                            msg.setIcon(QMessageBox.Information)
-                                            msg.setWindowTitle('Alert')
-                                            msg.setText("This customer does not have an email associated with their account!")
-                                            msg.setInformativeText("Please add an email in the Billing Address section of their profile in GNUCash")
-                                            msg.setStandardButtons(QMessageBox.Ok)
-                                            msg.exec()
                                             return None
                                     else:
                                         return None
-                                else:
-                                    return None
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Information)
             msg.setWindowTitle('Alert')
