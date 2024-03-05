@@ -32,16 +32,6 @@ def create_invoice(invoice_guid, type):
     
     invoice = db.get_invoice_by_guid(invoice_guid)
 
-    if invoice['date_posted'] == None:
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
-        msg.setWindowTitle('Alert')
-        msg.setText("This invoice has not been posted!")
-        msg.setInformativeText("Please post this invoice in GNUCash before sending to customer.")
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.exec()
-        return None
-
     job = db.get_job_from_invoice(invoice)
 
     customer = db.get_customer_from_invoice(invoice)
