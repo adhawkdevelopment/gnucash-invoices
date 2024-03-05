@@ -8,7 +8,7 @@ import db
 import os
 import gmail
 
-
+APP_FOLDER_PATH = '/opt/gnucash-invoices/'
 GUI_TITLE = 'GNUCash Invoice Tool'
 
 class Window(QMainWindow):
@@ -91,7 +91,7 @@ class Window(QMainWindow):
                                         document_type = pdf.get_document_types()[dialog.selected_value]
                                         email_subject = invoice['id'] + ' ' + document_type
                                         filename = email_subject + '.pdf'
-                                        filename_path = './temp/'
+                                        filename_path = APP_FOLDER_PATH + 'temp/'
                                         if document_type != None:
                                             if customer['addr_email'] != '':
                                                 created = pdf.create_invoice(invoice_guid, dialog.selected_value)
@@ -161,8 +161,8 @@ class Window(QMainWindow):
                                 filename = invoice_id + ' ' + pdf.DOCUMENT_TYPES[dialog.selected_value] + '.pdf'
                                 if dialog.selected_value != None:
                                     pdf.create_invoice(invoice_guid, dialog.selected_value)
-                                    os.system('evince ' + '"temp/' + filename + '"')
-                                    os.remove('temp/' + filename)
+                                    os.system('evince ' + '"' + APP_FOLDER_PATH + 'temp/' + filename + '"')
+                                    os.remove('"' + APP_FOLDER_PATH + 'temp/' + filename + '"')
                                     return True
                                 else:
                                     return None
